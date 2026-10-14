@@ -5,7 +5,7 @@ import type {
   ApiErrorResponse,
 } from '../types/customer.types'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1/customers'
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api/v1/customers'
 
 export class ApiError extends Error {
   status: number
@@ -42,15 +42,17 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 export const customerService = {
   async getCustomers(filters?: { dni?: string; email?: string }): Promise<Customer[]> {
-    const url = new URL(API_BASE_URL)
+    const params = new URLSearchParams()
     if (filters?.dni && filters.dni.trim() !== '') {
-      url.searchParams.append('dni', filters.dni.trim())
+      params.append('dni', filters.dni.trim())
     }
     if (filters?.email && filters.email.trim() !== '') {
-      url.searchParams.append('email', filters.email.trim())
+      params.append('email', filters.email.trim())
     }
+    const query = params.toString()
+    const url = query ? `${API_BASE_URL}?${query}` : API_BASE_URL
 
-    const res = await fetch(url.toString(), {
+    const res = await fetch(url, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

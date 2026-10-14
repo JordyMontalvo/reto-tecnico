@@ -5,6 +5,7 @@ import {
   RefreshCw,
   Activity,
   Layers,
+  Download,
 } from 'lucide-react'
 import { customerService } from './services/customerService'
 import type {
@@ -96,6 +97,52 @@ export function App() {
     fetchIndicators()
   }
 
+  const handleExportCsv = () => {
+    if (customers.length === 0) {
+      showToast('info', 'No hay clientes disponibles para exportar')
+      return
+    }
+
+    const headers = [
+      'ID',
+      'DNI',
+      'Nombre',
+      'Apellido',
+      'Correo Electrónico',
+      'Fecha de Nacimiento',
+      'Edad',
+      'Fecha de Registro',
+    ]
+
+    const rows = customers.map((c) => [
+      c.id,
+      `"${c.dni}"`,
+      `"${c.nombre.replace(/"/g, '""')}"`,
+      `"${c.apellido.replace(/"/g, '""')}"`,
+      `"${c.email.replace(/"/g, '""')}"`,
+      `"${c.fechaNacimiento}"`,
+      c.edad ?? '',
+      `"${c.fechaCreacion}"`,
+    ])
+
+    const csvContent =
+      '\uFEFF' + [headers.join(','), ...rows.map((r) => r.join(','))].join('\r\n')
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute(
+      'download',
+      `clientes_indigital_${new Date().toISOString().slice(0, 10)}.csv`
+    )
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    showToast('success', `Se exportaron ${customers.length} clientes a CSV exitosamente`)
+  }
+
   return (
     <div className="app-container">
       {/* App Header */}
@@ -159,6 +206,25 @@ export function App() {
                   Consulta de clientes registrados con filtros dinámicos por DNI y correo
                 </p>
               </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span
+                className="badge badge-slate"
+                style={{ fontSize: '13px', padding: '6px 12px', fontWeight: 600 }}
+              >
+                {customers.length} {customers.length === 1 ? 'cliente' : 'clientes'}
+              </span>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={handleExportCsv}
+                disabled={customers.length === 0}
+                title="Descargar lista de clientes en formato CSV para Excel"
+              >
+                <Download size={15} />
+                Exportar CSV
+              </button>
             </div>
           </div>
 

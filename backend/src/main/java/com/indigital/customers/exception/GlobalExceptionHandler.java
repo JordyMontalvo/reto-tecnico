@@ -35,6 +35,11 @@ public class GlobalExceptionHandler {
             ));
         }
 
+        log.warn("Fallo de validación en {} para {} campos: {}", 
+                request.getRequestURI(), 
+                details.size(), 
+                details.stream().map(d -> d.field() + " (" + d.reason() + ")").toList());
+
         ErrorResponse response = ErrorResponse.ofValidation(
                 HttpStatus.BAD_REQUEST.value(),
                 "Error de Validación",

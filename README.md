@@ -1,5 +1,17 @@
 # InDigital XP • [Reto 004] Senior Fullstack Developer
+
 ## Sistema de Gestión de Clientes, Auditoría y Análisis Demográfico de Natalidad
+
+<p align="center">
+  <img src="https://img.shields.io/badge/CI%2FCD-Passing-brightgreen?style=for-the-badge&logo=githubactions&logoColor=white" alt="CI/CD Status" />
+  <img src="https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 21" />
+  <img src="https://img.shields.io/badge/Spring_Boot-3.3.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19" />
+  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Coverage-88%25%20(Service%2096%25)-blueviolet?style=for-the-badge&logo=codecov&logoColor=white" alt="Coverage" />
+  <img src="https://img.shields.io/badge/Swagger_UI-OpenAPI_3.0-85EA2D?style=for-the-badge&logo=swagger&logoColor=black" alt="Swagger UI" />
+  <img src="https://img.shields.io/badge/Docker-Compose_Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+</p>
 
 Solución integral desarrollada para la evaluación técnica de **Senior Fullstack Developer** de **InDigital XP**. La solución implementa un microservicio backend robusto en **Spring Boot (Java 21)** gestionado por **Gradle** y una aplicación frontend moderna en **React con TypeScript** gestionada por **npm / Vite**, cubriendo el 100% de los requerimientos funcionales, técnicos y no funcionales evaluados con estándares de nivel enterprise.
 
@@ -288,6 +300,8 @@ Se incluye la colección oficial de Postman lista para importar en:
    - Notificaciones tipo toast flotantes sin bloqueo de interfaz.
    - Gráficos reactivos con Chart.js con tooltips informativos.
    - Filtros de búsqueda instantánea con opción de restablecimiento.
+6. **Exportación a CSV (Microsoft Excel Compatible):**
+   - Descarga instantánea de la lista de clientes (respetando filtros aplicados) con cabecera `\uFEFF` (Byte Order Mark UTF-8) para garantizar la apertura correcta de caracteres con tildes y caracteres especiales en Microsoft Excel.
 
 ---
 
@@ -304,4 +318,3 @@ El archivo `.github/workflows/ci.yml` ejecuta automáticamente en cada `push` o 
 - **Jordy Montalvo Alfaro**  
   *Desarrollador Full Stack Senior*  
   [jordyjosephmontalvo@gmail.com](mailto:jordyjosephmontalvo@gmail.com) • [GitHub](https://github.com/jordyjoseph)
-1
