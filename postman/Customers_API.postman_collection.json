@@ -1,0 +1,352 @@
+{
+  "info": {
+    "_postman_id": "c1f7b8a9-45e2-4932-a567-9d7a2f1b4092",
+    "name": "InDigital XP - Customers & Demographics API",
+    "description": "Colección completa de endpoints para el microservicio de Customers. Incluye creación, consulta con filtros, cálculo de indicadores y casos borde con aserciones automatizadas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Crear Cliente (Exitoso)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Tiene header Location', function () {",
+              "    pm.response.to.have.header('Location');",
+              "});",
+              "pm.test('Retorna el cliente con ID y fecha de creación generada', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('id');",
+              "    pm.expect(jsonData).to.have.property('fechaCreacion');",
+              "    pm.expect(jsonData.nombre).to.eql('Gonzalo');",
+              "    pm.expect(jsonData.dni).to.eql('78912345');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Gonzalo\",\n  \"apellido\": \"Paz Meza\",\n  \"email\": \"gonzalo.paz@example.com\",\n  \"dni\": \"78912345\",\n  \"fechaNacimiento\": \"1996-05-18\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "2. Crear Cliente (Error Validación - DNI inválido)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 400 Bad Request', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "pm.test('Contiene detalle de error en campo dni', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql(400);",
+              "    pm.expect(jsonData.validationErrors.some(e => e.field === 'dni')).to.be.true;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Carlos\",\n  \"apellido\": \"Rios\",\n  \"email\": \"carlos.rios@example.com\",\n  \"dni\": \"123\",\n  \"fechaNacimiento\": \"1994-03-10\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "3. Crear Cliente (Error Conflicto - DNI Duplicado)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 409 Conflict', function () {",
+              "    pm.response.to.have.status(409);",
+              "});",
+              "pm.test('Mensaje descriptivo de recurso duplicado', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql(409);",
+              "    pm.expect(jsonData.message).to.include('ya se encuentra registrado');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nombre\": \"Otro\",\n  \"apellido\": \"Usuario\",\n  \"email\": \"otro.usuario@example.com\",\n  \"dni\": \"78912345\",\n  \"fechaNacimiento\": \"1990-01-01\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "4. Listar Clientes (Sin Filtros)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Respuesta es un array', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+              "    pm.expect(jsonData.length).to.be.above(0);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers"
+          ]
+        }
+      }
+    },
+    {
+      "name": "5. Consultar Clientes (Filtro por DNI)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Los resultados coinciden con el DNI filtrado', function () {",
+              "    var jsonData = pm.response.json();",
+              "    jsonData.forEach(function (c) {",
+              "        pm.expect(c.dni).to.include('7891');",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers?dni=7891",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers"
+          ],
+          "query": [
+            {
+              "key": "dni",
+              "value": "7891"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "6. Consultar Clientes (Filtro por Email)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Retorna clientes filtrados por correo', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(Array.isArray(jsonData)).to.be.true;",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers?email=gonzalo",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers"
+          ],
+          "query": [
+            {
+              "key": "email",
+              "value": "gonzalo"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "7. Consultar Indicadores Demográficos & Tasa de Natalidad",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Estructura completa de indicadores requeridos', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('totalCustomers');",
+              "    pm.expect(jsonData).to.have.property('birthsByMonthYear');",
+              "    pm.expect(jsonData).to.have.property('highestBirthPeriod');",
+              "    pm.expect(jsonData).to.have.property('lowestBirthPeriod');",
+              "    pm.expect(jsonData).to.have.property('monthlyBirthRates');",
+              "    pm.expect(jsonData.monthlyBirthRates.length).to.eql(12);",
+              "});",
+              "pm.test('Tasa de natalidad mensual contiene formato porcentual', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.monthlyBirthRates[0]).to.have.property('formattedRate');",
+              "    pm.expect(jsonData.monthlyBirthRates[0]).to.have.property('ratePercentage');",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/customers/indicators",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "customers",
+            "indicators"
+          ]
+        }
+      }
+    },
+    {
+      "name": "8. Endpoint Alternativo (/customers sin prefijo v1)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status code is 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/customers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "customers"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ]
+}
