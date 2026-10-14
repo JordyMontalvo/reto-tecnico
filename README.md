@@ -30,7 +30,7 @@ Solución integral desarrollada para la evaluación técnica de **Senior Fullsta
   - [🔌 Catálogo de Endpoints de la API](#-catálogo-de-endpoints-de-la-api)
     - [Ejemplo de Request para Crear Cliente (`POST /api/v1/customers`)](#ejemplo-de-request-para-crear-cliente-post-apiv1customers)
     - [Ejemplo de Respuesta Exitosa (`201 Created`)](#ejemplo-de-respuesta-exitosa-201-created)
-  - [📖 Documentación Interactiva (Swagger / OpenAPI)](#-documentación-interactiva-swagger--openapi)
+  - [📖 Documentación Interactiva (Swagger / OpenAPI 3.0)](#-documentación-interactiva-swagger--openapi-30)
   - [🚀 Instrucciones de Instalación y Ejecución](#-instrucciones-de-instalación-y-ejecución)
     - [Opción 1: Despliegue con Docker Compose (Recomendado)](#opción-1-despliegue-con-docker-compose-recomendado)
     - [Opción 2: Ejecución Local Nativa (Backend + Frontend)](#opción-2-ejecución-local-nativa-backend--frontend)
@@ -169,13 +169,20 @@ La API expone endpoints duales: tanto bajo `/api/v1/customers` como bajo el alia
 
 ---
 
-## 📖 Documentación Interactiva (Swagger / OpenAPI)
+## 📖 Documentación Interactiva (Swagger / OpenAPI 3.0)
 
-Una vez iniciado el backend, accede a la documentación interactiva OpenAPI v3:
-- **Swagger UI:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-- **OpenAPI JSON Spec:** [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+El microservicio expone su contrato de interfaz OpenAPI v3 interactivo generado automáticamente por **Springdoc OpenAPI 2.6.0**:
 
-Permite ejecutar solicitudes en vivo, probar validaciones y revisar esquemas DTO.
+| Recurso | URL | Descripción |
+|:---|:---|:---|
+| **Swagger UI Interactivo** | [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html) | Interfaz web para explorar y probar endpoints en vivo |
+| **Ruta Alternativa** | [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) | Acceso directo a la distribución web |
+| **OpenAPI Spec (JSON)** | [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs) | Esquema formal consumible por Swagger / Postman / Insomnia |
+
+### 🎯 Funcionalidades disponibles en Swagger UI:
+1. **Pruebas interactivas ("Try it out"):** Permite enviar peticiones `POST` y `GET` directamente desde el navegador contra el servidor en ejecución sin herramientas externas.
+2. **Validación de Modelos y Schemas:** Inspección de estructuras DTO (`CustomerCreateRequest`, `CustomerResponse`, `CustomerIndicatorsResponse`, etc.) y respuestas RFC 7807 (`ErrorResponse`).
+3. **Acceso directo desde el Frontend:** El portal web incluye un botón de acceso directo **"Swagger API"** en la barra superior que abre la consola interactiva con un solo clic.
 
 ---
 

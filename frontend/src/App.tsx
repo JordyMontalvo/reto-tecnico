@@ -6,6 +6,7 @@ import {
   Activity,
   Layers,
   Download,
+  BookOpen,
 } from 'lucide-react'
 import { customerService } from './services/customerService'
 import type {
@@ -162,6 +163,17 @@ export function App() {
             <Activity size={13} />
             API Conectada
           </span>
+
+          <a
+            href="http://localhost:8080/swagger-ui.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary"
+            title="Abrir documentación Swagger UI / OpenAPI"
+          >
+            <BookOpen size={15} />
+            Swagger API
+          </a>
 
           <button
             type="button"
